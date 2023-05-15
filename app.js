@@ -14,7 +14,7 @@ app.get("/", (req, res) => res.type('html').send(html));
 
 
 app.get('/users/:userId', async (req, res) => {
-  await db.any('SELECT * FROM users WHERE id = $1', userId).then((data) => {
+  await db.any('SELECT * FROM users WHERE id = $1', req.params.userId).then((data) => {
     return res.send(data.value);
   })
     .catch((error) => {

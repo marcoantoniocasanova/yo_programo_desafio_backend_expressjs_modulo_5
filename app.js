@@ -2,10 +2,57 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+const pgp = require('pg-promise')(/* options */)
+//const db = pgp('postgres://macg:SIxnhEU7ZEdm9q17AdhZvKQIoUPIWqrF@dpg-chh6bpl269vdvsr9ocpg-a/databasecv')
+const db = pgp('postgres://postgress:qweqwe@host:5432/macg_cv')
+
+
 app.get("/", (req, res) => res.type('html').send(html));
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
+app.get('/users/:userId', async (req, res) => {
+  await db.any('SELECT * FROM users WHERE id = $1', userId).then((data) => {
+    return res.send(data.value);
+  })
+    .catch((error) => {
+      return res.send({ error: "cant retrieve user" });
+    })
+});
+
+app.post('/users', async (req, res) => {
+  let user = {
+    id: req.id,
+    name: req.name,
+    pass: req.pass,
+    first_name: req.first_name,
+    last_name: req.last_name,
+    birthday: req.birthday,
+    about_me: req.about_me,
+    description: req.description,
+    hobbies: req.hobbies,
+    created_at: req.created_at,
+  }
+  await db.none('INSERT INTO users(id, user) VALUES(${id}, ${this})', user)
+  //return res.send('GET HTTP method on user resource');
+  res.send(user);
+});
+
+app.put('/users/:userId', (req, res) => {
+  return res.send(
+    `PUT HTTP method on user/${req.params.userId} resource`,
+  );
+});
+
+app.delete('/users/:userId', (req, res) => {
+  return res.send(
+    `DELETE HTTP method on user/${req.params.userId} resource`,
+  );
+});
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 const html = `
 <!DOCTYPE html>

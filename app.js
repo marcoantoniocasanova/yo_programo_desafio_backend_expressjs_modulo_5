@@ -7,7 +7,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const pgp = require('pg-promise')(/* options */)
 //const db = pgp('postgres://macg:SIxnhEU7ZEdm9q17AdhZvKQIoUPIWqrF@dpg-chh6bpl269vdvsr9ocpg-a/databasecv')
-const db = pgp('postgres://postgress:qweqwe@host:5432/macg_cv')
+const db = pgp('postgres://macg:SIxnhEU7ZEdm9q17AdhZvKQIoUPIWqrF@dpg-chh6bpl269vdvsr9ocpg-a/databasecv')
 
 
 app.get("/", (req, res) => res.type('html').send(html));

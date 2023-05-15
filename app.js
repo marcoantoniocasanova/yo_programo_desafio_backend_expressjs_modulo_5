@@ -12,14 +12,35 @@ const db = pgp('postgres://macg:SIxnhEU7ZEdm9q17AdhZvKQIoUPIWqrF@dpg-chh6bpl269v
 
 app.get("/", (req, res) => res.type('html').send(html));
 
-
-app.get('/users/:userId', async (req, res) => {
-  await db.any('SELECT * FROM users WHERE id = $1', req.params.userId).then((data) => {
-    return res.send(data.value);
-  })
-    .catch((error) => {
-      return res.send({ error: "cant retrieve user" });
+app.get('/users/:id', async (req, res) => {
+  var userID = parseInt(req.params.id);
+  db.one('select * from users where id = $1', userID)
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'Retrieved ONE puppy'
+        });
     })
+    .catch(function (err) {
+      return next(err);
+    });
+});
+
+app.get('/users/', async (req, res) => {
+  db.any('select * from users')
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'Retrieved ALL users'
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
 });
 
 app.post('/users', async (req, res) => {
@@ -38,12 +59,38 @@ app.post('/users', async (req, res) => {
   await db.none('INSERT INTO users(id, user) VALUES(${id}, ${this})', user)
   //return res.send('GET HTTP method on user resource');
   res.send(user);
+
+
+  req.body.age = parseInt(req.body.age);
+  db.none('insert into users(name, breed, age, sex)' +
+    'values(${name}, ${breed}, ${age}, ${sex})',
+    req.body)
+    .then(function () {
+      res.status(200)
+        .json({
+          status: 'success',
+          message: 'Inserted one puppy'
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
 });
 
 app.put('/users/:userId', (req, res) => {
-  return res.send(
-    `PUT HTTP method on user/${req.params.userId} resource`,
-  );
+
+  db.none('update users set name=$1, pass=$2, first_name=$3, last_name=$4, birthday=$5, about_me=$6, description=$7, hobbies=$8, created_at=$9  where id=$10',
+    [req.body.name, req.body.pass, req.body.first_name, req.body.last_name, req.body.birthday, req.body.about_me, req.body.description, req.body.hobbies, req.body.created_at, req.params.userId])
+    .then(function () {
+      res.status(200)
+        .json({
+          status: 'success',
+          message: 'Updated User'
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
 });
 
 app.delete('/users/:userId', (req, res) => {

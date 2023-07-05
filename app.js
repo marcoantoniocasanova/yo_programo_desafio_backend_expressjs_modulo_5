@@ -26,7 +26,11 @@ app.get('/users/:id', async (req, res) => {
         });
     })
     .catch(function (err) {
-      return next(err);
+      res.status(500)
+        .json({
+          status: 'error',
+          message: err
+        });
     });
 });
 
@@ -44,7 +48,11 @@ app.put('/users/aboutme/:id', async (req, res) => {
         });
     })
     .catch(function (err) {
-      return next(err);
+      res.status(500)
+        .json({
+          status: 'error',
+          message: err
+        });
     });
 });
 
@@ -62,7 +70,11 @@ app.put('/users/description/:id', async (req, res) => {
         });
     })
     .catch(function (err) {
-      return next(err);
+      res.status(500)
+        .json({
+          status: 'error',
+          message: err
+        });
     });
 });
 
@@ -79,7 +91,11 @@ app.get('/users/', async (req, res) => {
         });
     })
     .catch(function (err) {
-      return next(err);
+      res.status(500)
+        .json({
+          status: 'error',
+          message: err
+        });
     });
 });
 
@@ -113,7 +129,11 @@ app.post('/users', async (req, res) => {
         });
     })
     .catch(function (err) {
-      return next(err);
+      res.status(500)
+        .json({
+          status: 'error',
+          message: err
+        });
     });
 });
 
@@ -129,7 +149,11 @@ app.put('/users/:userId', (req, res) => {
         });
     })
     .catch(function (err) {
-      return next(err);
+      res.status(500)
+        .json({
+          status: 'error',
+          message: err
+        });
     });
 });
 

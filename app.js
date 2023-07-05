@@ -66,7 +66,6 @@ app.put('/users/description/:id', async (req, res) => {
 });
 
 
-const q1 = t.none('UPDATE users SET active = $1 WHERE id = $2', [true, 123]);
 
 app.get('/users/', async (req, res) => {
   db.any('select * from users')

@@ -21,13 +21,52 @@ app.get('/users/:id', async (req, res) => {
         .json({
           status: 'success',
           data: data,
-          message: 'Retrieved ONE puppy'
+          message: 'Retrieved ONE'
         });
     })
     .catch(function (err) {
       return next(err);
     });
 });
+
+app.put('/users/aboutme/:id', async (req, res) => {
+  var userID = parseInt(req.params.id);
+  var aboutMe = req.query.aboutMe;
+
+  db.one('UPDATE users SET aboutme = $1 WHERE id = $2', [aboutMe, userID])
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'updated ONE'
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+});
+
+app.put('/users/description/:id', async (req, res) => {
+  var userID = parseInt(req.params.id);
+  var description = req.query.description;
+
+  db.one('UPDATE users SET description = $1 WHERE id = $2', [description, userID])
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'updated ONE'
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+});
+
+
+const q1 = t.none('UPDATE users SET active = $1 WHERE id = $2', [true, 123]);
 
 app.get('/users/', async (req, res) => {
   db.any('select * from users')

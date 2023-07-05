@@ -6,6 +6,7 @@ const port = process.env.PORT || 3001;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors())
+app.options('*', cors());
 const pgp = require('pg-promise')(/* options */)
 //const db = pgp('postgres://macg:SIxnhEU7ZEdm9q17AdhZvKQIoUPIWqrF@dpg-chh6bpl269vdvsr9ocpg-a/databasecv')
 const db = pgp('postgres://macg:SIxnhEU7ZEdm9q17AdhZvKQIoUPIWqrF@dpg-chh6bpl269vdvsr9ocpg-a/databasecv')

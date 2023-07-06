@@ -186,8 +186,9 @@ app.delete('/users/:userId', (req, res) => {
 });
 
 app.get('/experiencias', async (req, res) => {
-  db.one('select * from experiencia')
+  db.oneOrNone('select * from experiencia')
     .then(function (data) {
+      console.log(data);
       res.status(200)
         .json({
           status: 'success',

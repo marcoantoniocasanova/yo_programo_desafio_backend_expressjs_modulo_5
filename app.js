@@ -56,6 +56,28 @@ app.put('/users/aboutme/:id', async (req, res) => {
     });
 });
 
+app.put('/users/aboutmetitle/:id', async (req, res) => {
+  var userID = parseInt(req.params.id);
+  var aboutMeTitle = req.body.aboutMeTitle;
+
+  db.none('UPDATE users SET about_me_title = $1 WHERE id = $2', [aboutMeTitle, userID])
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'updated ONE'
+        });
+    })
+    .catch(function (err) {
+      res.status(500)
+        .json({
+          status: 'error',
+          message: err
+        });
+    });
+});
+
 app.put('/users/description/:id', async (req, res) => {
   var userID = parseInt(req.params.id);
   var description = req.body.description;
@@ -162,6 +184,26 @@ app.delete('/users/:userId', (req, res) => {
     `DELETE HTTP method on user/${req.params.userId} resource`,
   );
 });
+
+app.get('/experiencias', async (req, res) => {
+  db.one('select * from experiencia')
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'Retrieved multiple experiencias'
+        });
+    })
+    .catch(function (err) {
+      res.status(500)
+        .json({
+          status: 'error',
+          message: err
+        });
+    });
+});
+
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 

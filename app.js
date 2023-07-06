@@ -36,9 +36,9 @@ app.get('/users/:id', async (req, res) => {
 
 app.put('/users/aboutme/:id', async (req, res) => {
   var userID = parseInt(req.params.id);
-  var aboutMe = req.query.aboutMe;
+  var aboutMe = req.body.aboutMe;
 
-  db.one('UPDATE users SET aboutme = $1 WHERE id = $2', [aboutMe, userID])
+  db.none('UPDATE users SET about_me = $1 WHERE id = $2', [aboutMe, userID])
     .then(function (data) {
       res.status(200)
         .json({
@@ -58,7 +58,7 @@ app.put('/users/aboutme/:id', async (req, res) => {
 
 app.put('/users/description/:id', async (req, res) => {
   var userID = parseInt(req.params.id);
-  var description = req.query.description;
+  var description = req.body.description;
 
   db.one('UPDATE users SET description = $1 WHERE id = $2', [description, userID])
     .then(function (data) {

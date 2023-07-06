@@ -186,7 +186,7 @@ app.delete('/users/:userId', (req, res) => {
 });
 
 app.get('/experiencias', async (req, res) => {
-  db.any('select * from users')
+  db.any('select * from experiencia')
     .then(function (data) {
       res.status(200)
         .json({

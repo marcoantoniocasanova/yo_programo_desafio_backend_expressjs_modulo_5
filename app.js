@@ -186,14 +186,54 @@ app.delete('/users/:userId', (req, res) => {
 });
 
 app.get('/experiencias', async (req, res) => {
-  db.any('select * from experiencia')
+  db.any('select * from users')
     .then(function (data) {
-      console.log(data);
       res.status(200)
         .json({
           status: 'success',
           data: data,
-          message: 'Retrieved multiple experiencias'
+          message: 'Retrieved ALL users'
+        });
+    })
+    .catch(function (err) {
+      res.status(500)
+        .json({
+          status: 'error',
+          message: err
+        });
+    });
+});
+
+app.post('/experiencias', async (req, res) => {
+  var exp = req.body.experiencias;
+
+  let experiencia = {
+    id: exp.id,
+    fecha: exp.fecha,
+    titulo: exp.titulo,
+    img: exp.img,
+  }
+
+  await db.none('INSERT INTO experiencia(id, experiencia) VALUES(${id}, ${this})', experiencia)
+
+  res.status(200)
+    .json({
+      status: 'success',
+      message: 'Save NEw exp'
+    });
+});
+
+app.put('/experiencias/:id', async (req, res) => {
+  var expID = parseInt(req.params.id);
+  var body = req.body.experiencia;
+
+  db.none('UPDATE experiencia SET fecha = $1,  titulo = $2,  img = $3  WHERE id = $4', [body.fecha, body.titulo, body.img, expID])
+    .then(function (data) {
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'updated ONE'
         });
     })
     .catch(function (err) {

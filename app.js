@@ -231,6 +231,9 @@ app.put('/experiencias/:id', async (req, res) => {
   var expID = parseInt(req.params.id);
   var body = req.body.experiencia;
 
+  console.log(req);
+  console.log(req.body);
+
   db.none('UPDATE experiencia SET fecha = $1,  titulo = $2,  img = $3  WHERE id = $4', [body.fecha, body.titulo, body.img, expID])
     .then(function (data) {
       res.status(200)

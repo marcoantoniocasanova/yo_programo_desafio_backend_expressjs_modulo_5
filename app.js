@@ -208,7 +208,7 @@ app.post('/experiencias', async (req, res) => {
   var exp = req.body;
   console.log(exp)
 
-  await db.query(`INSERT INTO experiencia(fecha,titulo,img) VALUES('${exp.fecha}','${exp.titulo}','${exp.img}') RETURNING id`).then(function (data) {
+  await db.query(`INSERT INTO experiencia(fecha,titulo,img) VALUES('${exp.fecha}','${exp.titulo}','${exp.img}')`).then(function (data) {
     res.status(200)
       .json({
         status: 'success',

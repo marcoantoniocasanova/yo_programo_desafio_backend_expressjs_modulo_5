@@ -207,6 +207,8 @@ app.get('/experiencias', async (req, res) => {
 app.post('/experiencias', async (req, res) => {
   var exp = req.body.experiencia;
 
+  console.log(exp);
+
   let experiencia = {
     id: exp.id,
     fecha: exp.fecha,
@@ -214,7 +216,21 @@ app.post('/experiencias', async (req, res) => {
     img: exp.img,
   }
 
-  await db.none('INSERT INTO experiencia(id, experiencia) VALUES(${id}, ${this})', experiencia)
+  console.log(experiencia)
+  await db.none('INSERT INTO experiencia(id, experiencia) VALUES(${id}, ${this})', experiencia).then(function () {
+    res.status(200)
+      .json({
+        status: 'success',
+        message: 'Create exp'
+      });
+  })
+    .catch(function (err) {
+      res.status(500)
+        .json({
+          status: 'error',
+          message: err
+        });
+    });
 
   res.status(200)
     .json({

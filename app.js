@@ -205,7 +205,7 @@ app.get('/experiencias', async (req, res) => {
 });
 
 app.post('/experiencias', async (req, res) => {
-  var exp = req.body.experiencias;
+  var exp = req.body.experiencia;
 
   let experiencia = {
     id: exp.id,

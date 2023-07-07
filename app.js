@@ -218,13 +218,14 @@ app.post('/experiencias', async (req, res) => {
 
   console.log(experiencia)
 
-  await db.query('INSERT INTO experiencia(id,fecha,titulo,img) VALUES(${exp.id},${exp.fecha},${exp.titulo},${exp.img})')
-  //await db.none('INSERT INTO experiencia(id, experiencia) VALUES(${id}, ${this})', experiencia).then(function () {
-  res.status(200)
-    .json({
-      status: 'success',
-      message: 'Create exp'
-    })
+  await db.query(`INSERT INTO experiencia(id,fecha,titulo,img) VALUES(${exp.id},${exp.fecha},${exp.titulo},${exp.img})`).then(function (data) {
+    res.status(200)
+      .json({
+        status: 'success',
+        data: data,
+        message: 'Save exp'
+      });
+  })
     .catch(function (err) {
       res.status(500)
         .json({
@@ -232,6 +233,8 @@ app.post('/experiencias', async (req, res) => {
           message: err
         });
     });
+  //await db.none('INSERT INTO experiencia(id, experiencia) VALUES(${id}, ${this})', experiencia).then(function () {
+
 });
 
 app.put('/experiencias/:id', async (req, res) => {

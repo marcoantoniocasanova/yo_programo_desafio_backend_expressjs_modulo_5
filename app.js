@@ -224,21 +224,14 @@ app.post('/experiencias', async (req, res) => {
     .json({
       status: 'success',
       message: 'Create exp'
+    })
+    .catch(function (err) {
+      res.status(500)
+        .json({
+          status: 'error',
+          message: err
+        });
     });
-})
-  .catch(function (err) {
-    res.status(500)
-      .json({
-        status: 'error',
-        message: err
-      });
-  });
-
-res.status(200)
-  .json({
-    status: 'success',
-    message: 'Save NEw exp'
-  });
 });
 
 app.put('/experiencias/:id', async (req, res) => {

@@ -11,6 +11,19 @@ const pgp = require('pg-promise')(/* options */)
 //const db = pgp('postgres://macg:SIxnhEU7ZEdm9q17AdhZvKQIoUPIWqrF@dpg-chh6bpl269vdvsr9ocpg-a/databasecv')
 const db = pgp('postgres://macg:SIxnhEU7ZEdm9q17AdhZvKQIoUPIWqrF@dpg-chh6bpl269vdvsr9ocpg-a/databasecv')
 
+/* const cn = {
+  host: 'localhost',
+  port: 5432,
+  database: 'databasecv',
+  user: 'postgres',
+  password: 'postgres',
+  capSQL: true,
+  max: 30 // use up to 30 connections
+  // "types" - in case you want to set custom type parsers on the pool level
+};
+
+const db = pgp(cn);
+ */
 
 app.get("/", (req, res) => res.type('html').send(html));
 
@@ -213,7 +226,7 @@ app.post('/experiencias', async (req, res) => {
       .json({
         status: 'success',
         data: data,
-        message: 'Save exp'
+        message: 'saved exp'
       });
   })
     .catch(function (err) {
@@ -227,23 +240,40 @@ app.post('/experiencias', async (req, res) => {
 
 });
 
+app.delete('/experiencias/:id', async (req, res) => {
+  var expId = parseInt(req.params.id);
+
+  db.result('DELETE FROM experiencia WHERE id = $1', [expId], r => r.rowCount)
+    .then(data => {
+      // data = number of rows that were deleted
+      res.status(200)
+        .json({
+          status: 'success',
+          data: data,
+          message: 'deleted ONE'
+        });
+    }).catch(function (err) {
+      res.status(500)
+        .json({
+          status: 'error',
+          message: err
+        });
+    });
+});
+
 app.put('/experiencias/:id', async (req, res) => {
-  var expID = parseInt(req.params.id);
-  var body = req.body.experiencia;
+  var expId = parseInt(req.params.id);
+  var body = req.body;
 
-  console.log(req);
-  console.log(req.body);
-
-  db.none('UPDATE experiencia SET fecha = $1,  titulo = $2,  img = $3  WHERE id = $4', [body.fecha, body.titulo, body.img, expID])
-    .then(function (data) {
+  db.result('UPDATE experiencia SET titulo = $1, fecha = $2, img = $3 WHERE id = $4', [body.titulo, body.fecha, body.img, expId], r => r.rowCount)
+    .then(data => {
       res.status(200)
         .json({
           status: 'success',
           data: data,
           message: 'updated ONE'
         });
-    })
-    .catch(function (err) {
+    }).catch(function (err) {
       res.status(500)
         .json({
           status: 'error',
